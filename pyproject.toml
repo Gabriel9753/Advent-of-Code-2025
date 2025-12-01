@@ -1,5 +1,5 @@
 [project]
-name = "vscode-python-template"
+name = "aoc_2025"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,6 +8,7 @@ dependencies = [
     "bandit>=1.9.2",
     "jupyter>=1.1.1",
     "loguru>=0.7.3",
+    "markdownify>=1.2.2",
     "matplotlib>=3.10.7",
     "numpy>=2.3.5",
     "pandas>=2.3.3",
@@ -63,3 +64,4 @@ ignore = ["E402", "W293", "F405"]
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
 quote-style = "double"
+

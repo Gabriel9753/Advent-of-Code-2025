@@ -1,3 +1,8 @@
+# aoc
+input.txt
+example_input.txt
+description.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -145,9 +150,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# ruff
-.ruff_cache/
 
 # pytype static type analyzer
 .pytype/
