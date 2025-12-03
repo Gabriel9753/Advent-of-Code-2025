@@ -1,7 +1,9 @@
+import functools
 import os
 import re
 import sys
 import time
+from typing import List
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 # full path to the parent directory
@@ -47,11 +49,16 @@ def load_input(input_file_path):
         sys.exit(1)
 
 
-def average_time(runs, func, *args, **kwargs):
+def average_time(runs, func, func_caches_to_reset: List[functools._lru_cache_wrapper] = [], *args, **kwargs):
     total_time = 0
     for _ in range(runs):
         _, time = func(*args, **kwargs)
         total_time += time
+        _ = [
+            f.cache_clear()
+            for f in func_caches_to_reset
+            if hasattr(f, "cache_clear") and callable(getattr(f, "cache_clear"))
+        ]
     return total_time / runs
 
 

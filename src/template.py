@@ -2,8 +2,18 @@ import argparse
 import os
 import re
 import sys
+from bisect import bisect_left, bisect_right, insort
+from collections import OrderedDict, defaultdict, deque, namedtuple
 from datetime import datetime
+from functools import lru_cache, partial
+from heapq import heapify, heappop, heappush
+from itertools import chain, combinations, permutations, product
+from math import ceil, floor, gcd, inf, lcm, log2, sqrt
+from typing import Dict, List, Set, Tuple
 
+import numpy as np
+import z3
+from more_itertools import chunked, windowed
 from rich import print
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -11,6 +21,8 @@ par_dir = os.path.dirname(cur_dir)
 sys.path.append(par_dir)
 
 from util.general_util import average_time, load_input, timer, write_times_to_readme
+
+sys.setrecursionlimit(5000)
 
 last_dir = str(os.path.basename(os.path.normpath(cur_dir)))
 cur_day = re.findall(r"\d+", last_dir)
@@ -20,24 +32,21 @@ images_path = os.path.join(par_dir, "images")
 
 @timer(return_time=True)
 def preprocess_input(input_data):
-    # Preprocess the input data (if needed)
     return input_data.splitlines()
 
 
 @timer(return_time=True)
 def task1(day_input):
-    # Day-specific code for Task 1
-    raise NotImplementedError
+    print(day_input)
+    return -1
 
 
 @timer(return_time=True)
 def task2(day_input):
-    # Day-specific code for Task 2
-    raise NotImplementedError
+    return -1
 
 
 def main(args):
-    # Choose between the real input or the example input
     if args.example:
         day_input = load_input(os.path.join(cur_dir, "example_input.txt"))
     else:
@@ -54,8 +63,8 @@ def main(args):
     print(f"Task 2: {result_task2} ({time_task2:.6f} seconds)")
 
     if args.timeit:
-        avg_time_task1 = average_time(100, task1, day_input)
-        avg_time_task2 = average_time(100, task2, day_input)
+        avg_time_task1 = average_time(100, task1, [], day_input)
+        avg_time_task2 = average_time(100, task2, [], day_input)
         print("\nAverage times:")
         print(f"Task 1: {avg_time_task1:.6f} seconds")
         print(f"Task 2: {avg_time_task2:.6f} seconds")
@@ -64,6 +73,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--example", type=int, help="Use the example input", default=1)
-    parser.add_argument("--timeit", type=int, help="Average the execution time over 100 runs", default=0)
+    parser.add_argument("--example", help="Use the example input", type=bool, default=False, store_true=True)
+    parser.add_argument(
+        "--timeit", help="Average the execution time over 100 runs", type=bool, default=False, store_true=True
+    )
     main(parser.parse_args())
