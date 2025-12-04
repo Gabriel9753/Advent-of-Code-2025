@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import time
+from collections import deque
 from typing import List
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -54,12 +55,24 @@ def average_time(runs, func, func_caches_to_reset: List[functools._lru_cache_wra
     for _ in range(runs):
         _, time = func(*args, **kwargs)
         total_time += time
-        _ = [
-            f.cache_clear()
-            for f in func_caches_to_reset
-            if hasattr(f, "cache_clear") and callable(getattr(f, "cache_clear"))
-        ]
+        for f in func_caches_to_reset:
+            if hasattr(f, "cache_clear") and callable(getattr(f, "cache_clear")):
+                # print(f"Clear cache of {f.__class__.__name__} with: {f.cache_info()}")
+                f.cache_clear()
+
     return total_time / runs
+
+
+def safe_pop(q: deque, popleft: bool = False):
+    """
+    To pop elements from a queue in a while loop:
+    while (roll := safe_pop(q)):
+        ...
+    """
+    try:
+        return q.pop() if not popleft else q.popleft()
+    except IndexError:
+        return None
 
 
 def write_times_to_readme(day, time_task1, time_task2):

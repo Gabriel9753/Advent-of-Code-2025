@@ -47,7 +47,7 @@ def task2(day_input):
 
 
 def main(args):
-    if args.example:
+    if not args.final:
         day_input = load_input(os.path.join(cur_dir, "example_input.txt"))
     else:
         day_input = load_input(os.path.join(cur_dir, "input.txt"))
@@ -73,8 +73,6 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--example", help="Use the example input", type=bool, default=False, store_true=True)
-    parser.add_argument(
-        "--timeit", help="Average the execution time over 100 runs", type=bool, default=False, store_true=True
-    )
+    parser.add_argument("--final", help="Use the final input", action="store_true")
+    parser.add_argument("--timeit", help="Average the execution time over 100 runs", action="store_true")
     main(parser.parse_args())
