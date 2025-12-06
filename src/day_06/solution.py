@@ -2,19 +2,9 @@ import argparse
 import os
 import re
 import sys
-from bisect import bisect_left, bisect_right, insort
-from collections import OrderedDict, defaultdict, deque, namedtuple
 from datetime import datetime
-from functools import lru_cache, partial
-from heapq import heapify, heappop, heappush
-from itertools import chain, combinations, permutations, product
-from math import ceil, floor, gcd, inf, lcm, log2, sqrt
-from operator import mul
-from typing import Dict, List, Set, Tuple
 
 import numpy as np
-import z3
-from more_itertools import chunked, windowed
 from rich import print
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -46,61 +36,80 @@ def task1(inp):
     return sum([op[x[-1]](list(map(int, x[:-1]))) for x in inp])
 
 
+# @timer(return_time=True)
+# def task2(inp):
+#     """
+#     123 328  51 64
+#      45 64  387 23
+#       6 98  215 314
+#     ->
+#     ['1' ' ' ' '] |
+#     ['2' '4' ' '] | GROUP I
+#     ['3' '5' '6'] |
+#     [' ' ' ' ' ']
+#     ['3' '6' '9'] |
+#     ['2' '4' '8'] | GROUP II
+#     ['8' ' ' ' '] |
+#     [' ' ' ' ' ']
+#     [' ' '3' '2'] |
+#     ['5' '8' '1'] | GROUP III
+#     ['1' '7' '5'] |
+#     [' ' ' ' ' ']
+#     ['6' '2' '3'] |
+#     ['4' '3' '1'] | GROUP IV
+#     [' ' ' ' '4'] |
+#     """
+#     inp, ops = np.array([list(r) for r in inp[:-1]]).T, re.findall(r"\*|\+", inp[-1])
+#     groups = defaultdict(list)
+#     group = 0
+#     for row in inp:
+#         if all([x == " " for x in row]):
+#             group += 1
+#         else:
+#             groups[group].append(int("".join(row)))
+
+#     """
+#     ['1' ' ' ' '] |
+#     ['2' '4' ' '] | GROUP I
+#     ['3' '5' '6'] |
+#     [' ' ' ' ' ']
+#     ['3' '6' '9'] |
+#     ['2' '4' '8'] | GROUP II
+#     ['8' ' ' ' '] |
+#     [' ' ' ' ' ']
+#     [' ' '3' '2'] |
+#     ['5' '8' '1'] | GROUP III
+#     ['1' '7' '5'] |
+#     [' ' ' ' ' ']
+#     ['6' '2' '3'] |
+#     ['4' '3' '1'] | GROUP IV
+#     [' ' ' ' '4'] |
+
+#     ->
+#     defaultdict(<class 'list'>, {0: [1, 24, 356], 1: [369, 248, 8], 2: [32, 581, 175], 3: [623, 431, 4]})
+
+#     ops = ['*', '+', '*', '+'] # group 0, 1, 2, 3...
+#     """
+#     return sum(op[ops[g]](x) for g, x in groups.items())
+
+
 @timer(return_time=True)
 def task2(inp):
-    """
-    123 328  51 64
-     45 64  387 23
-      6 98  215 314
-    ->
-    ['1' ' ' ' '] |
-    ['2' '4' ' '] | GROUP I
-    ['3' '5' '6'] |
-    [' ' ' ' ' ']
-    ['3' '6' '9'] |
-    ['2' '4' '8'] | GROUP II
-    ['8' ' ' ' '] |
-    [' ' ' ' ' ']
-    [' ' '3' '2'] |
-    ['5' '8' '1'] | GROUP III
-    ['1' '7' '5'] |
-    [' ' ' ' ' ']
-    ['6' '2' '3'] |
-    ['4' '3' '1'] | GROUP IV
-    [' ' ' ' '4'] |
-    """
-    inp, ops = np.array([list(r) for r in inp[:-1]]).T, re.findall(r"\*|\+", inp[-1])
-    groups = defaultdict(list)
-    group = 0
-    for row in inp:
-        if all([x == " " for x in row]):
-            group += 1
-        else:
-            groups[group].append(int("".join(row)))
+    inp = [list(x + " ") for x in inp]
+    inp[-1] = inp[-1] + [" "] * (len(inp[0]) - len(inp[-1]))
+    inp = np.array(inp).T
 
-    """
-    ['1' ' ' ' '] |
-    ['2' '4' ' '] | GROUP I
-    ['3' '5' '6'] |
-    [' ' ' ' ' ']
-    ['3' '6' '9'] |
-    ['2' '4' '8'] | GROUP II
-    ['8' ' ' ' '] |
-    [' ' ' ' ' ']
-    [' ' '3' '2'] |
-    ['5' '8' '1'] | GROUP III
-    ['1' '7' '5'] |
-    [' ' ' ' ' ']
-    ['6' '2' '3'] |
-    ['4' '3' '1'] | GROUP IV
-    [' ' ' ' '4'] |
-    
-    ->
-    defaultdict(<class 'list'>, {0: [1, 24, 356], 1: [369, 248, 8], 2: [32, 581, 175], 3: [623, 431, 4]})
-    
-    ops = ['*', '+', '*', '+'] # group 0, 1, 2, 3...
-    """
-    return sum(op[ops[g]](x) for g, x in groups.items())
+    total = 0
+    sub_result = []
+    current_op = op["+"]
+    for r, row in enumerate(inp):
+        if all([x == " " for x in row]):
+            total += current_op(sub_result)
+            sub_result = []
+        else:
+            num, current_op = int("".join(row[0:-1])), op.get(row[-1], current_op)
+            sub_result.append(num)
+    return total
 
 
 def main(args):
