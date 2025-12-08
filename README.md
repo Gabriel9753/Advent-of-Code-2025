@@ -26,7 +26,7 @@ How to get your unique session cookie? [Click here](https://github.com/wimglenn/
 | [5](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_05/solution.py)   | 0.003692      | 0.000070      |
 | [6](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_06/solution.py)   | 0.006496      | 0.013417      |
 | [7](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_07/solution.py)   | 0.003811      | 0.004259      |
-| [8](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_08/solution.py)   | -      | -      |
+| [8](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_08/solution.py)   | 0.007711      | 0.009064      |
 | [9](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_09/solution.py)   | -      | -      |
 | [10](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_10/solution.py)   | -      | -      |
 | [11](https://github.com/Gabriel9753/Advent-of-Code-2025/blob/main/src/day_11/solution.py)   | -      | -      |
